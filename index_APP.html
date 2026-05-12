@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <link rel="manifest" href="manifest.json">
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Apontamento Produção</title>
+
+  <style>
+
+    body{
+      font-family:Arial;
+      background:#f2f2f2;
+      margin:0;
+      padding:20px;
+      overflow-x:hidden;
+    }
+
+    .card{
+
+      background:white;
+
+      padding:20px;
+
+      border-radius:12px;
+
+      max-width:500px;
+
+      margin:auto;
+
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+
+    }
+
+    h1{
+      text-align:center;
+    }
+
+    input,
+    select,
+    button{
+
+      width:100%;
+
+      padding:16px;
+
+      margin-top:10px;
+
+      border-radius:10px;
+
+      border:1px solid #ccc;
+
+      font-size:20px;
+
+      box-sizing:border-box;
+
+    }
+
+    button{
+
+      border:none;
+
+      color:white;
+
+      font-weight:bold;
+
+      cursor:pointer;
+
+      transition:0.2s;
+
+    }
+
+    button:disabled{
+
+      opacity:0.4;
+
+      cursor:not-allowed;
+
+    }
+
+    .success{
+      background:#2e7d32;
+    }
+
+    .primary{
+      background:#1976d2;
+    }
+
+    .danger{
+      background:#d32f2f;
+    }
+
+    .contador{
+
+      font-size:70px;
+
+      text-align:center;
+
+      margin-top:20px;
+
+      font-weight:bold;
+
+    }
+
+    .metros{
+
+      text-align:center;
+
+      font-size:28px;
+
+      margin-top:10px;
+
+      font-weight:bold;
+
+    }
+
+    .tempo{
+
+      text-align:center;
+
+      font-size:20px;
+
+      margin-top:10px;
+
+      font-weight:bold;
+
+    }
+
+    .info{
+
+      margin-top:20px;
+
+      background:#eee;
+
+      padding:15px;
+
+      border-radius:10px;
+
+    }
+
+    /* ALERTA */
+
+    .overlay{
+
+      position:fixed;
+
+      top:0;
+
+      left:0;
+
+      width:100%;
+
+      height:100%;
+
+      display:none;
+
+      justify-content:center;
+
+      align-items:center;
+
+      background:red;
+
+      z-index:99999;
+
+      animation:piscar 0.5s infinite;
+
+    }
+
+    .overlay-content{
+
+      background:white;
+
+      padding:40px;
+
+      border-radius:20px;
+
+      width:90%;
+
+      max-width:500px;
+
+      text-align:center;
+
+      box-shadow:0 0 40px rgba(0,0,0,0.5);
+
+    }
+
+    .overlay h1{
+
+      font-size:50px;
+
+      color:red;
+
+      margin-bottom:20px;
+
+    }
+
+    .overlay p{
+
+      font-size:30px;
+
+      font-weight:bold;
+
+      margin-bottom:20px;
+
+    }
+
+    .overlay button{
+
+      background:#2e7d32;
+
+      font-size:30px;
+
+      padding:20px;
+
+    }
+
+    @keyframes piscar{
+
+      0%{
+        background:red;
+      }
+
+      50%{
+        background:#ff8a80;
+      }
+
+      100%{
+        background:red;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ALERTA -->
+
+  <div
+    class="overlay"
+    id="overlayAlerta"
+  >
+
+    <div class="overlay-content">
+
+      <h1>
+        ⚠ TROCAR STRETCHER ⚠
+      </h1>
+
+      <p>
+        300 METROS ATINGIDOS
+      </p>
+
+      <button onclick="confirmarTroca()">
+        CONFIRMAR TROCA
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <h1>APONTAMENTO</h1>
+
+    <input
+      type="number"
+      id="op"
+      maxlength="6"
+      placeholder="Ordem Produção"
+    >
+
+    <select id="diametro">
+
+      <option value="">
+        Selecione o diâmetro
+      </option>
+
+      <option>Ø16</option>
+      <option>Ø20</option>
+      <option>Ø25</option>
+      <option>Ø32</option>
+
+    </select>
+
+    <select id="metros">
+
+      <option value="">
+        Metros por rolo
+      </option>
+
+      <option value="50">50</option>
+      <option value="100">100</option>
+      <option value="150">150</option>
+
+    </select>
+
+    <button
+      id="btnIniciar"
+      class="success"
+      onclick="iniciarProducao()"
+    >
+      INICIAR PRODUÇÃO
+    </button>
+
+    <div
+      class="contador"
+      id="contador"
+    >
+      0
+    </div>
+
+    <div
+      class="metros"
+      id="metrosTotal"
+    >
+      0 metros
+    </div>
+
+    <div
+      class="tempo"
+      id="tempoRolo"
+    >
+      Tempo último rolo: 0s
+    </div>
+
+    <button
+      id="btnApontar"
+      class="primary"
+      onclick="apontarRolo()"
+      disabled
+    >
+      APONTAR ROLO
+    </button>
+
+    <button
+      id="btnFinalizar"
+      class="danger"
+      onclick="finalizarProducao()"
+      disabled
+    >
+      FINALIZAR OP
+    </button>
+
+    <div class="info">
+
+      <p>
+        <strong>Status:</strong>
+        <span id="status">
+          Parado
+        </span>
+      </p>
+
+      <p>
+        <strong>Início:</strong>
+        <span id="inicio">
+          -
+        </span>
+      </p>
+
+      <p>
+        <strong>Último apontamento:</strong>
+        <span id="ultimo">
+          -
+        </span>
+      </p>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbwVDSYwnsNGcyUQ4uzEKtw8cEFw2s6dzdCjKihKJnchh1vyE_AqzDDHCgHsGo2lQ4kShQ/exec";
+
+    let contador = 0;
+
+    let producaoIniciada = false;
+
+    let ultimoApontamento = null;
+
+    let metrosPorRolo = 0;
+
+    let metrosTotal = 0;
+
+    let alarmeAtivo = false;
+
+    let audioAlarme = null;
+
+    async function enviarParaSheets(dados){
+
+      try{
+
+        await fetch(API_URL, {
+
+          method:"POST",
+
+          body:JSON.stringify(dados)
+
+        });
+
+      }catch(erro){
+
+        console.error(erro);
+
+      }
+
+    }
+
+    function atualizarBotoes(){
+
+      document.getElementById(
+        "btnIniciar"
+      ).disabled = producaoIniciada;
+
+      document.getElementById(
+        "btnApontar"
+      ).disabled = !producaoIniciada;
+
+      document.getElementById(
+        "btnFinalizar"
+      ).disabled = !producaoIniciada;
+
+    }
+
+    function iniciarProducao(){
+
+      const op =
+        document.getElementById("op")
+        .value
+        .trim();
+
+      const diametro =
+        document.getElementById("diametro")
+        .value;
+
+      const metros =
+        document.getElementById("metros")
+        .value;
+
+      if(
+        !op ||
+        !diametro ||
+        !metros
+      ){
+
+        alert(
+          "Preencha todos os campos"
+        );
+
+        return;
+      }
+
+      if(op.length > 6){
+
+        alert(
+          "OP máximo 6 dígitos"
+        );
+
+        return;
+      }
+
+      producaoIniciada = true;
+
+      contador = 0;
+
+      metrosTotal = 0;
+
+      metrosPorRolo = Number(metros);
+
+      ultimoApontamento = new Date();
+
+      atualizarBotoes();
+
+      document.getElementById(
+        "status"
+      ).innerText = "Produzindo";
+
+      document.getElementById(
+        "inicio"
+      ).innerText =
+        new Date().toLocaleString();
+
+      enviarParaSheets({
+
+        tipo:"INICIO",
+
+        op,
+
+        diametro,
+
+        metros
+
+      });
+
+    }
+
+    function apontarRolo(){
+
+      if(alarmeAtivo){
+        return;
+      }
+
+      contador++;
+
+      metrosTotal += metrosPorRolo;
+
+      const agora = new Date();
+
+      let tempoEntreRolos = 0;
+
+      if(ultimoApontamento){
+
+        tempoEntreRolos =
+          Math.floor(
+            (agora - ultimoApontamento)
+            / 1000
+          );
+
+      }
+
+      ultimoApontamento = agora;
+
+      document.getElementById(
+        "contador"
+      ).innerText = contador;
+
+      document.getElementById(
+        "metrosTotal"
+      ).innerText =
+        metrosTotal + " metros";
+
+      document.getElementById(
+        "tempoRolo"
+      ).innerText =
+        "Tempo último rolo: " +
+        tempoEntreRolos +
+        "s";
+
+      document.getElementById(
+        "ultimo"
+      ).innerText =
+        agora.toLocaleString();
+
+      enviarParaSheets({
+
+        tipo:"APONTAMENTO",
+
+        rolo:contador,
+
+        metrosTotal,
+
+        tempoEntreRolos
+
+      });
+
+      if(
+        metrosTotal >= 300 &&
+        !alarmeAtivo
+      ){
+
+        dispararAlarme();
+
+      }
+
+    }
+
+    function dispararAlarme(){
+
+      alarmeAtivo = true;
+
+      document.getElementById(
+        "overlayAlerta"
+      ).style.display = "flex";
+
+      audioAlarme = new Audio(
+        "https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"
+      );
+
+      audioAlarme.loop = true;
+
+      audioAlarme.play();
+
+      navigator.vibrate([
+        500,
+        300,
+        500,
+        300,
+        500
+      ]);
+
+    }
+
+    function confirmarTroca(){
+
+      alarmeAtivo = false;
+
+      metrosTotal = 0;
+
+      document.getElementById(
+        "overlayAlerta"
+      ).style.display = "none";
+
+      document.getElementById(
+        "metrosTotal"
+      ).innerText = "0 metros";
+
+      if(audioAlarme){
+
+        audioAlarme.pause();
+
+      }
+
+      enviarParaSheets({
+
+        tipo:"TROCA_STRETCHER"
+
+      });
+
+    }
+
+    function finalizarProducao(){
+
+      enviarParaSheets({
+
+        tipo:"FINALIZADO",
+
+        rolo:contador
+
+      });
+
+      producaoIniciada = false;
+
+      contador = 0;
+
+      metrosTotal = 0;
+
+      atualizarBotoes();
+
+      document.getElementById(
+        "contador"
+      ).innerText = "0";
+
+      document.getElementById(
+        "metrosTotal"
+      ).innerText = "0 metros";
+
+      document.getElementById(
+        "tempoRolo"
+      ).innerText =
+        "Tempo último rolo: 0s";
+
+      document.getElementById(
+        "status"
+      ).innerText = "Finalizado";
+
+      document.getElementById(
+        "inicio"
+      ).innerText = "-";
+
+      document.getElementById(
+        "ultimo"
+      ).innerText = "-";
+
+      // LIMPAR CAMPOS
+
+      document.getElementById(
+        "op"
+      ).value = "";
+
+      document.getElementById(
+        "diametro"
+      ).value = "";
+
+      document.getElementById(
+        "metros"
+      ).value = "";
+
+      alert("Produção finalizada");
+
+    }
+
+    atualizarBotoes();
+
+  </script>
+
+  <script>
+
+    if("serviceWorker" in navigator){
+
+      navigator.serviceWorker.register(
+        "service-worker.js"
+      );
+
+    }
+
+  </script>
+
+</body>
+</html>
