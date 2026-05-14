@@ -12,16 +12,24 @@
     content="width=device-width, initial-scale=1.0"
   />
 
-  <title>Apontamento Produção</title>
+  <title>
+    APONTAMENTO ISOBARBI
+  </title>
 
   <style>
 
     body{
+
       font-family:Arial;
+
       background:#f2f2f2;
+
       margin:0;
+
       padding:20px;
+
       overflow-x:hidden;
+
     }
 
     .card{
@@ -32,16 +40,44 @@
 
       border-radius:12px;
 
-      max-width:500px;
+      max-width:550px;
 
       margin:auto;
 
-      box-shadow:0 0 10px rgba(0,0,0,0.1);
+      box-shadow:0 0 15px rgba(0,0,0,0.1);
+
+    }
+
+    .logo{
+
+      width:180px;
+
+      display:block;
+
+      margin:auto;
+
+      margin-bottom:20px;
 
     }
 
     h1{
+
       text-align:center;
+
+      margin-bottom:10px;
+
+    }
+
+    .developer{
+
+      text-align:center;
+
+      color:#777;
+
+      margin-bottom:20px;
+
+      font-size:14px;
+
     }
 
     input,
@@ -94,13 +130,21 @@
       background:#1976d2;
     }
 
+    .warning{
+      background:#ef6c00;
+    }
+
+    .material{
+      background:#6a1b9a;
+    }
+
     .danger{
       background:#d32f2f;
     }
 
     .contador{
 
-      font-size:70px;
+      font-size:75px;
 
       text-align:center;
 
@@ -114,7 +158,7 @@
 
       text-align:center;
 
-      font-size:28px;
+      font-size:30px;
 
       margin-top:10px;
 
@@ -145,8 +189,6 @@
       border-radius:10px;
 
     }
-
-    /* ALERTA */
 
     .overlay{
 
@@ -271,13 +313,24 @@
 
   <div class="card">
 
-    <h1>APONTAMENTO</h1>
+    <img
+      src="logo.png"
+      class="logo"
+    >
+
+    <h1>
+      APONTAMENTO ISOBARBI
+    </h1>
+
+    <div class="developer">
+      By: Felipe Moreira
+    </div>
 
     <input
       type="number"
       id="op"
-      maxlength="6"
       placeholder="Ordem Produção"
+      maxlength="6"
     >
 
     <select id="diametro">
@@ -344,6 +397,33 @@
     </button>
 
     <button
+      id="btnParada"
+      class="warning"
+      onclick="abrirParada('PARADA_MAQUINA')"
+      disabled
+    >
+      PARADA MÁQUINA
+    </button>
+
+    <button
+      id="btnMaterial"
+      class="material"
+      onclick="abrirParada('FALTA_MATERIAL')"
+      disabled
+    >
+      FALTA MATERIAL
+    </button>
+
+    <button
+      id="btnRetorno"
+      class="success"
+      onclick="retornarProducao()"
+      disabled
+    >
+      RETORNAR PRODUÇÃO
+    </button>
+
+    <button
       id="btnFinalizar"
       class="danger"
       onclick="finalizarProducao()"
@@ -398,6 +478,14 @@
 
     let audioAlarme = null;
 
+    let maquinaParada = false;
+
+    let motivoParada = "";
+
+    let inicioParada = null;
+
+    let tempoParadoAcumulado = 0;
+
     async function enviarParaSheets(dados){
 
       try{
@@ -426,11 +514,31 @@
 
       document.getElementById(
         "btnApontar"
-      ).disabled = !producaoIniciada;
+      ).disabled =
+        !producaoIniciada ||
+        maquinaParada;
 
       document.getElementById(
         "btnFinalizar"
-      ).disabled = !producaoIniciada;
+      ).disabled =
+        !producaoIniciada;
+
+      document.getElementById(
+        "btnParada"
+      ).disabled =
+        !producaoIniciada ||
+        maquinaParada;
+
+      document.getElementById(
+        "btnMaterial"
+      ).disabled =
+        !producaoIniciada ||
+        maquinaParada;
+
+      document.getElementById(
+        "btnRetorno"
+      ).disabled =
+        !maquinaParada;
 
     }
 
@@ -476,6 +584,8 @@
       contador = 0;
 
       metrosTotal = 0;
+
+      tempoParadoAcumulado = 0;
 
       metrosPorRolo = Number(metros);
 
@@ -528,7 +638,19 @@
             / 1000
           );
 
+        tempoEntreRolos =
+          tempoEntreRolos -
+          tempoParadoAcumulado;
+
+        if(tempoEntreRolos < 0){
+
+          tempoEntreRolos = 0;
+
+        }
+
       }
+
+      tempoParadoAcumulado = 0;
 
       ultimoApontamento = agora;
 
@@ -573,6 +695,71 @@
         dispararAlarme();
 
       }
+
+    }
+
+    function abrirParada(tipo){
+
+      if(maquinaParada){
+        return;
+      }
+
+      maquinaParada = true;
+
+      motivoParada = tipo;
+
+      inicioParada = new Date();
+
+      document.getElementById(
+        "status"
+      ).innerText = tipo;
+
+      atualizarBotoes();
+
+      enviarParaSheets({
+
+        tipo,
+
+        horarioInicio:
+          inicioParada.toLocaleString()
+
+      });
+
+    }
+
+    function retornarProducao(){
+
+      if(!maquinaParada){
+        return;
+      }
+
+      const fimParada = new Date();
+
+      const tempoParado =
+        Math.floor(
+          (fimParada - inicioParada)
+          / 1000
+        );
+
+      tempoParadoAcumulado += tempoParado;
+
+      maquinaParada = false;
+
+      document.getElementById(
+        "status"
+      ).innerText = "Produzindo";
+
+      atualizarBotoes();
+
+      enviarParaSheets({
+
+        tipo:"RETORNO",
+
+        motivo:motivoParada,
+
+        tempoParado
+
+      });
 
     }
 
@@ -642,6 +829,8 @@
 
       producaoIniciada = false;
 
+      maquinaParada = false;
+
       contador = 0;
 
       metrosTotal = 0;
@@ -673,8 +862,6 @@
         "ultimo"
       ).innerText = "-";
 
-      // LIMPAR CAMPOS
-
       document.getElementById(
         "op"
       ).value = "";
@@ -687,7 +874,9 @@
         "metros"
       ).value = "";
 
-      alert("Produção finalizada");
+      alert(
+        "Produção finalizada"
+      );
 
     }
 
