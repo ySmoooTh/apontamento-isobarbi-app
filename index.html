@@ -549,6 +549,12 @@
         maquinaParada;
 
       document.getElementById(
+        "btnOperador"
+      ).disabled =
+        !producaoIniciada ||
+        maquinaParada;
+
+      document.getElementById(
         "btnRetorno"
       ).disabled =
         !maquinaParada;
