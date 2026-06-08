@@ -560,6 +560,7 @@
       try{
 
         await fetch(API_URL, {
+          mode:"no-cors",
           method:"POST",
           body:JSON.stringify(payload)
         });
