@@ -1,4 +1,4 @@
-const CACHE_NAME = "apontamento-isobarbi-v1";
+const CACHE_NAME = "apontamento-isobarbi-v2";
 
 const ASSETS = [
   "./",
@@ -50,6 +50,39 @@ self.addEventListener("fetch", event => {
   ){
     event.respondWith(fetch(event.request));
     return;
+  }
+
+  const aceitarHtml =
+    event.request.mode === "navigate" ||
+    (
+      event.request.headers.get("accept") || ""
+    ).includes("text/html");
+
+  if(aceitarHtml){
+
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+
+          const clone = response.clone();
+
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, clone);
+          });
+
+          return response;
+
+        })
+        .catch(() => {
+          return caches.match(event.request)
+            .then(cached => {
+              return cached || caches.match("./index.html");
+            });
+        })
+    );
+
+    return;
+
   }
 
   event.respondWith(
