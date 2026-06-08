@@ -1,125 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
 
   <link rel="manifest" href="manifest.json">
 
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  />
+  >
 
-  <title>
-    APONTAMENTO ISOBARBI
-  </title>
+  <title>APONTAMENTO ISOBARBI</title>
 
   <style>
 
     body{
-
-      font-family:Arial;
-
+      font-family:Arial, sans-serif;
       background:#f2f2f2;
-
       margin:0;
-
       padding:20px;
-
       overflow-x:hidden;
-
     }
 
     .card{
-
       background:white;
-
       padding:20px;
-
       border-radius:12px;
-
       max-width:550px;
-
       margin:auto;
-
       box-shadow:0 0 15px rgba(0,0,0,0.1);
-
     }
 
     .logo{
-
       width:180px;
-
       display:block;
-
-      margin:auto;
-
-      margin-bottom:20px;
-
+      margin:auto auto 20px;
     }
 
     h1{
-
       text-align:center;
-
       margin-bottom:10px;
-
     }
 
     .developer{
-
       text-align:center;
-
       color:#777;
-
       margin-bottom:20px;
-
       font-size:14px;
-
     }
 
     input,
     select,
     button{
-
       width:100%;
-
       padding:16px;
-
       margin-top:10px;
-
       border-radius:10px;
-
       border:1px solid #ccc;
-
       font-size:20px;
-
       box-sizing:border-box;
-
     }
 
     button{
-
       border:none;
-
       color:white;
-
       font-weight:bold;
-
       cursor:pointer;
-
       transition:0.2s;
-
     }
 
     button:disabled{
-
-      opacity:0.4;
-
+      opacity:0.45;
       cursor:not-allowed;
-
     }
 
     .success{
@@ -139,7 +92,7 @@
     }
 
     .operador{
-      background:#07dbe2;
+      background:#00838f;
     }
 
     .danger{
@@ -147,172 +100,130 @@
     }
 
     .contador{
-
       font-size:75px;
-
       text-align:center;
-
       margin-top:20px;
-
       font-weight:bold;
-
     }
 
     .metros{
-
       text-align:center;
-
       font-size:30px;
-
       margin-top:10px;
-
       font-weight:bold;
-
     }
 
     .tempo{
-
       text-align:center;
-
       font-size:20px;
-
       margin-top:10px;
-
       font-weight:bold;
+    }
 
+    .feedback{
+      display:none;
+      margin-top:16px;
+      padding:12px 14px;
+      border-radius:10px;
+      font-size:16px;
+      font-weight:bold;
+    }
+
+    .feedback.info{
+      display:block;
+      background:#e3f2fd;
+      color:#0d47a1;
+    }
+
+    .feedback.success{
+      display:block;
+      background:#e8f5e9;
+      color:#1b5e20;
+    }
+
+    .feedback.warning{
+      display:block;
+      background:#fff3e0;
+      color:#e65100;
+    }
+
+    .feedback.error{
+      display:block;
+      background:#ffebee;
+      color:#b71c1c;
     }
 
     .info{
-
       margin-top:20px;
-
       background:#eee;
-
       padding:15px;
-
       border-radius:10px;
-
     }
 
     .overlay{
-
       position:fixed;
-
       top:0;
-
       left:0;
-
       width:100%;
-
       height:100%;
-
       display:none;
-
       justify-content:center;
-
       align-items:center;
-
       background:red;
-
       z-index:99999;
-
       animation:piscar 0.5s infinite;
-
     }
 
     .overlay-content{
-
       background:white;
-
       padding:40px;
-
       border-radius:20px;
-
       width:90%;
-
       max-width:500px;
-
       text-align:center;
-
       box-shadow:0 0 40px rgba(0,0,0,0.5);
-
     }
 
     .overlay h1{
-
-      font-size:50px;
-
+      font-size:42px;
       color:red;
-
       margin-bottom:20px;
-
     }
 
     .overlay p{
-
       font-size:30px;
-
       font-weight:bold;
-
       margin-bottom:20px;
-
     }
 
     .overlay button{
-
       background:#2e7d32;
-
       font-size:30px;
-
       padding:20px;
-
     }
 
     @keyframes piscar{
-
-      0%{
-        background:red;
-      }
-
-      50%{
-        background:#ff8a80;
-      }
-
-      100%{
-        background:red;
-      }
-
+      0%{ background:red; }
+      50%{ background:#ff8a80; }
+      100%{ background:red; }
     }
 
   </style>
 
 </head>
-
 <body>
-
-  <!-- ALERTA -->
 
   <div
     class="overlay"
     id="overlayAlerta"
   >
-
     <div class="overlay-content">
-
-      <h1>
-        ⚠ TROCAR STRETCHER ⚠
-      </h1>
-
-      <p>
-        300 METROS ATINGIDOS
-      </p>
-
+      <h1>TROCAR STRETCHER</h1>
+      <p>300 METROS ATINGIDOS</p>
       <button onclick="confirmarTroca()">
         CONFIRMAR TROCA
       </button>
-
     </div>
-
   </div>
 
   <div class="card">
@@ -320,11 +231,10 @@
     <img
       src="logo.png"
       class="logo"
+      alt="Logo Isobarbi"
     >
 
-    <h1>
-      APONTAMENTO ISOBARBI
-    </h1>
+    <h1>APONTAMENTO ISOBARBI</h1>
 
     <div class="developer">
       By: Felipe Moreira
@@ -338,28 +248,18 @@
     >
 
     <select id="diametro">
-
-      <option value="">
-        Selecione o diâmetro
-      </option>
-
+      <option value="">Selecione o diâmetro</option>
       <option>Ø16</option>
       <option>Ø20</option>
       <option>Ø25</option>
       <option>Ø32</option>
-
     </select>
 
     <select id="metros">
-
-      <option value="">
-        Metros por rolo
-      </option>
-
+      <option value="">Metros por rolo</option>
       <option value="50">50</option>
       <option value="100">100</option>
       <option value="150">150</option>
-
     </select>
 
     <button
@@ -436,6 +336,12 @@
       RETORNAR PRODUÇÃO
     </button>
 
+    <div
+      id="feedback"
+      class="feedback"
+      aria-live="polite"
+    ></div>
+
     <button
       id="btnFinalizar"
       class="danger"
@@ -446,28 +352,20 @@
     </button>
 
     <div class="info">
-
       <p>
         <strong>Status:</strong>
-        <span id="status">
-          Parado
-        </span>
+        <span id="status">Parado</span>
       </p>
 
       <p>
         <strong>Início:</strong>
-        <span id="inicio">
-          -
-        </span>
+        <span id="inicio">-</span>
       </p>
 
       <p>
         <strong>Último apontamento:</strong>
-        <span id="ultimo">
-          -
-        </span>
+        <span id="ultimo">-</span>
       </p>
-
     </div>
 
   </div>
@@ -477,44 +375,406 @@
     const API_URL =
       "https://script.google.com/macros/s/AKfycbwVDSYwnsNGcyUQ4uzEKtw8cEFw2s6dzdCjKihKJnchh1vyE_AqzDDHCgHsGo2lQ4kShQ/exec";
 
+    const STORAGE_ESTADO =
+      "apontamento-isobarbi-estado";
+
+    const STORAGE_FILA =
+      "apontamento-isobarbi-fila";
+
+    const TEXTO_BOTAO_APONTAR =
+      "APONTAR ROLO";
+
+    const STATUS_PARADA = {
+      PARADA_MAQUINA:"Parada máquina",
+      FALTA_MATERIAL:"Falta material",
+      FALTA_OPERADOR:"Falta operador"
+    };
+
+    const INTERVALO_MINIMO_APONTAMENTO_MS =
+      4 * 60 * 1000;
+
+    const DEBOUNCE_APONTAMENTO_MS = 1000;
+
     let contador = 0;
-
     let producaoIniciada = false;
-
     let ultimoApontamento = null;
-
+    let ultimoApontamentoRegistrado = null;
     let metrosPorRolo = 0;
-
     let metrosTotal = 0;
-
     let alarmeAtivo = false;
-
     let audioAlarme = null;
-
     let maquinaParada = false;
-
     let motivoParada = "";
-
     let inicioParada = null;
-
     let tempoParadoAcumulado = 0;
+    let tempoUltimoRolo = 0;
+    let statusAtual = "Parado";
+    let inicioExibicao = "-";
+    let ultimoExibicao = "-";
+    let filaPendencias = [];
+    let intervaloBloqueio = null;
+    let ultimoCliqueApontarMs = 0;
 
-    async function enviarParaSheets(dados){
+    function gerarIdEvento(){
+
+      if(
+        window.crypto &&
+        typeof window.crypto.randomUUID ===
+        "function"
+      ){
+        return window.crypto.randomUUID();
+      }
+
+      return "evt-" + Date.now();
+
+    }
+
+    function mostrarFeedback(
+      mensagem,
+      tipo = "info"
+    ){
+
+      const feedback =
+        document.getElementById("feedback");
+
+      feedback.className =
+        "feedback " + tipo;
+
+      feedback.innerText = mensagem;
+
+    }
+
+    function limparFeedback(){
+
+      const feedback =
+        document.getElementById("feedback");
+
+      feedback.className = "feedback";
+      feedback.innerText = "";
+
+    }
+
+    function formatarDuracao(segundos){
+
+      const minutos =
+        Math.floor(segundos / 60);
+
+      const segundosRestantes =
+        segundos % 60;
+
+      return (
+        minutos +
+        "m " +
+        String(segundosRestantes).padStart(2, "0") +
+        "s"
+      );
+
+    }
+
+    function serializarData(data){
+
+      return data
+        ? data.toISOString()
+        : null;
+
+    }
+
+    function desserializarData(valor){
+
+      return valor ? new Date(valor) : null;
+
+    }
+
+    function salvarFila(){
+
+      localStorage.setItem(
+        STORAGE_FILA,
+        JSON.stringify(filaPendencias)
+      );
+
+    }
+
+    function carregarFila(){
+
+      try{
+        const filaSalva =
+          localStorage.getItem(STORAGE_FILA);
+
+        filaPendencias =
+          filaSalva ? JSON.parse(filaSalva) : [];
+      }catch(erro){
+        console.error(erro);
+        filaPendencias = [];
+      }
+
+    }
+
+    function registrarPendencia(dados){
+
+      filaPendencias.push(dados);
+      salvarFila();
+
+      mostrarFeedback(
+        "Sem conexão com a planilha. " +
+        "Registro salvo localmente" +
+        (
+          filaPendencias.length > 1
+            ? " (" +
+              filaPendencias.length +
+              " pendentes)."
+            : "."
+        ),
+        "warning"
+      );
+
+    }
+
+    async function enviarParaSheets(
+      dados,
+      opcoes = {}
+    ){
+
+      const permitirFila =
+        opcoes.permitirFila !== false;
+
+      const silencioso =
+        opcoes.silencioso === true;
+
+      const payload = {
+        eventId:
+          dados.eventId || gerarIdEvento(),
+        criadoEm:
+          dados.criadoEm ||
+          new Date().toISOString(),
+        ...dados
+      };
+
+      if(
+        !navigator.onLine &&
+        permitirFila
+      ){
+        registrarPendencia(payload);
+        return false;
+      }
 
       try{
 
-        await fetch(API_URL, {
-
+        const resposta = await fetch(API_URL, {
           method:"POST",
-
-          body:JSON.stringify(dados)
-
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify(payload)
         });
+
+        if(!resposta.ok){
+          throw new Error("Falha ao enviar");
+        }
+
+        if(
+          !silencioso &&
+          filaPendencias.length === 0
+        ){
+          mostrarFeedback(
+            "Dados enviados com sucesso.",
+            "success"
+          );
+        }
+
+        return true;
 
       }catch(erro){
 
         console.error(erro);
 
+        if(permitirFila){
+          registrarPendencia(payload);
+        }
+
+        return false;
+
+      }
+
+    }
+
+    async function processarFilaPendencias(){
+
+      if(
+        !navigator.onLine ||
+        filaPendencias.length === 0
+      ){
+        return;
+      }
+
+      const filaAtual = [...filaPendencias];
+
+      filaPendencias = [];
+      salvarFila();
+
+      let enviados = 0;
+
+      for(const item of filaAtual){
+
+        const sucesso =
+          await enviarParaSheets(item, {
+            permitirFila:false,
+            silencioso:true
+          });
+
+        if(!sucesso){
+
+          filaPendencias = [
+            item,
+            ...filaAtual.slice(enviados + 1)
+          ];
+
+          salvarFila();
+
+          mostrarFeedback(
+            "Ainda existem " +
+            filaPendencias.length +
+            " envios pendentes.",
+            "warning"
+          );
+
+          return;
+
+        }
+
+        enviados++;
+
+      }
+
+      mostrarFeedback(
+        "Pendências enviadas com sucesso.",
+        "success"
+      );
+
+    }
+
+    function salvarEstado(){
+
+      const estado = {
+        contador,
+        producaoIniciada,
+        ultimoApontamento:
+          serializarData(ultimoApontamento),
+        ultimoApontamentoRegistrado:
+          serializarData(
+            ultimoApontamentoRegistrado
+          ),
+        metrosPorRolo,
+        metrosTotal,
+        maquinaParada,
+        motivoParada,
+        inicioParada:
+          serializarData(inicioParada),
+        tempoParadoAcumulado,
+        tempoUltimoRolo,
+        statusAtual,
+        inicioExibicao,
+        ultimoExibicao,
+        op:document.getElementById("op").value,
+        diametro:
+          document.getElementById("diametro")
+          .value,
+        metros:
+          document.getElementById("metros").value
+      };
+
+      localStorage.setItem(
+        STORAGE_ESTADO,
+        JSON.stringify(estado)
+      );
+
+    }
+
+    function limparEstadoSalvo(){
+
+      localStorage.removeItem(STORAGE_ESTADO);
+
+    }
+
+    function tempoRestanteBloqueioMs(){
+
+      if(!ultimoApontamentoRegistrado){
+        return 0;
+      }
+
+      return Math.max(
+        0,
+        INTERVALO_MINIMO_APONTAMENTO_MS -
+        (
+          new Date() -
+          ultimoApontamentoRegistrado
+        )
+      );
+
+    }
+
+    function renderizarEstado(){
+
+      document.getElementById(
+        "contador"
+      ).innerText = contador;
+
+      document.getElementById(
+        "metrosTotal"
+      ).innerText =
+        metrosTotal + " metros";
+
+      document.getElementById(
+        "tempoRolo"
+      ).innerText =
+        "Tempo último rolo: " +
+        tempoUltimoRolo +
+        "s";
+
+      document.getElementById(
+        "status"
+      ).innerText = statusAtual;
+
+      document.getElementById(
+        "inicio"
+      ).innerText = inicioExibicao;
+
+      document.getElementById(
+        "ultimo"
+      ).innerText = ultimoExibicao;
+
+      atualizarBotoes();
+
+    }
+
+    function atualizarBotaoApontar(){
+
+      const botao =
+        document.getElementById("btnApontar");
+
+      const bloqueioAtivo =
+        producaoIniciada &&
+        !maquinaParada &&
+        tempoRestanteBloqueioMs() > 0;
+
+      botao.disabled =
+        !producaoIniciada ||
+        maquinaParada ||
+        bloqueioAtivo;
+
+      if(bloqueioAtivo){
+
+        botao.innerText =
+          TEXTO_BOTAO_APONTAR +
+          " (" +
+          formatarDuracao(
+            Math.ceil(
+              tempoRestanteBloqueioMs() / 1000
+            )
+          ) +
+          ")";
+
+      }else{
+        botao.innerText = TEXTO_BOTAO_APONTAR;
       }
 
     }
@@ -526,15 +786,8 @@
       ).disabled = producaoIniciada;
 
       document.getElementById(
-        "btnApontar"
-      ).disabled =
-        !producaoIniciada ||
-        maquinaParada;
-
-      document.getElementById(
         "btnFinalizar"
-      ).disabled =
-        !producaoIniciada;
+      ).disabled = !producaoIniciada;
 
       document.getElementById(
         "btnParada"
@@ -556,8 +809,96 @@
 
       document.getElementById(
         "btnRetorno"
-      ).disabled =
-        !maquinaParada;
+      ).disabled = !maquinaParada;
+
+      atualizarBotaoApontar();
+
+    }
+
+    function iniciarContadorBloqueio(){
+
+      if(intervaloBloqueio){
+        clearInterval(intervaloBloqueio);
+      }
+
+      intervaloBloqueio = setInterval(
+        () => {
+          atualizarBotaoApontar();
+        },
+        1000
+      );
+
+    }
+
+    function restaurarEstado(){
+
+      try{
+
+        const estadoSalvo =
+          localStorage.getItem(STORAGE_ESTADO);
+
+        if(!estadoSalvo){
+          renderizarEstado();
+          return;
+        }
+
+        const estado = JSON.parse(estadoSalvo);
+
+        contador = estado.contador || 0;
+        producaoIniciada =
+          Boolean(estado.producaoIniciada);
+        ultimoApontamento =
+          desserializarData(
+            estado.ultimoApontamento
+          );
+        ultimoApontamentoRegistrado =
+          desserializarData(
+            estado.ultimoApontamentoRegistrado
+          );
+        metrosPorRolo =
+          estado.metrosPorRolo || 0;
+        metrosTotal = estado.metrosTotal || 0;
+        maquinaParada =
+          Boolean(estado.maquinaParada);
+        motivoParada = estado.motivoParada || "";
+        inicioParada =
+          desserializarData(estado.inicioParada);
+        tempoParadoAcumulado =
+          estado.tempoParadoAcumulado || 0;
+        tempoUltimoRolo =
+          estado.tempoUltimoRolo || 0;
+        statusAtual =
+          estado.statusAtual || "Parado";
+        inicioExibicao =
+          estado.inicioExibicao || "-";
+        ultimoExibicao =
+          estado.ultimoExibicao || "-";
+
+        document.getElementById("op").value =
+          estado.op || "";
+
+        document.getElementById("diametro")
+        .value = estado.diametro || "";
+
+        document.getElementById("metros").value =
+          estado.metros || "";
+
+      }catch(erro){
+
+        console.error(erro);
+
+      }
+
+      if(filaPendencias.length > 0){
+        mostrarFeedback(
+          "Existem " +
+          filaPendencias.length +
+          " envios pendentes.",
+          "warning"
+        );
+      }
+
+      renderizarEstado();
 
     }
 
@@ -581,56 +922,51 @@
         !diametro ||
         !metros
       ){
-
-        alert(
-          "Preencha todos os campos"
+        mostrarFeedback(
+          "Preencha todos os campos.",
+          "error"
         );
-
         return;
       }
 
       if(op.length > 6){
-
-        alert(
-          "OP máximo 6 dígitos"
+        mostrarFeedback(
+          "OP máximo 6 dígitos.",
+          "error"
         );
-
         return;
       }
 
       producaoIniciada = true;
-
       contador = 0;
-
       metrosTotal = 0;
-
       tempoParadoAcumulado = 0;
-
+      tempoUltimoRolo = 0;
       metrosPorRolo = Number(metros);
-
       ultimoApontamento = new Date();
+      ultimoApontamentoRegistrado = null;
+      maquinaParada = false;
+      motivoParada = "";
+      inicioParada = null;
+      statusAtual = "Produzindo";
+      inicioExibicao =
+        ultimoApontamento.toLocaleString();
+      ultimoExibicao = "-";
 
-      atualizarBotoes();
+      limparFeedback();
+      renderizarEstado();
+      salvarEstado();
 
-      document.getElementById(
-        "status"
-      ).innerText = "Produzindo";
-
-      document.getElementById(
-        "inicio"
-      ).innerText =
-        new Date().toLocaleString();
+      mostrarFeedback(
+        "Produção iniciada.",
+        "success"
+      );
 
       enviarParaSheets({
-
         tipo:"INICIO",
-
         op,
-
         diametro,
-
         metros
-
       });
 
     }
@@ -641,11 +977,35 @@
         return;
       }
 
-      contador++;
+      if(
+        Date.now() - ultimoCliqueApontarMs <
+        DEBOUNCE_APONTAMENTO_MS
+      ){
+        return;
+      }
 
-      metrosTotal += metrosPorRolo;
+      ultimoCliqueApontarMs = Date.now();
+
+      const tempoRestante =
+        tempoRestanteBloqueioMs();
+
+      if(tempoRestante > 0){
+        mostrarFeedback(
+          "Aguarde " +
+          formatarDuracao(
+            Math.ceil(tempoRestante / 1000)
+          ) +
+          " para o próximo apontamento.",
+          "warning"
+        );
+        atualizarBotaoApontar();
+        return;
+      }
 
       const agora = new Date();
+
+      contador++;
+      metrosTotal += metrosPorRolo;
 
       let tempoEntreRolos = 0;
 
@@ -653,66 +1013,45 @@
 
         tempoEntreRolos =
           Math.floor(
-            (agora - ultimoApontamento)
-            / 1000
+            (agora - ultimoApontamento) / 1000
           );
 
-        tempoEntreRolos =
-          tempoEntreRolos -
+        tempoEntreRolos -=
           tempoParadoAcumulado;
 
         if(tempoEntreRolos < 0){
-
           tempoEntreRolos = 0;
-
         }
 
       }
 
+      tempoUltimoRolo = tempoEntreRolos;
       tempoParadoAcumulado = 0;
-
       ultimoApontamento = agora;
+      ultimoApontamentoRegistrado = agora;
+      statusAtual = "Produzindo";
+      ultimoExibicao = agora.toLocaleString();
 
-      document.getElementById(
-        "contador"
-      ).innerText = contador;
+      renderizarEstado();
+      salvarEstado();
 
-      document.getElementById(
-        "metrosTotal"
-      ).innerText =
-        metrosTotal + " metros";
-
-      document.getElementById(
-        "tempoRolo"
-      ).innerText =
-        "Tempo último rolo: " +
-        tempoEntreRolos +
-        "s";
-
-      document.getElementById(
-        "ultimo"
-      ).innerText =
-        agora.toLocaleString();
+      mostrarFeedback(
+        "Apontamento registrado.",
+        "success"
+      );
 
       enviarParaSheets({
-
         tipo:"APONTAMENTO",
-
         rolo:contador,
-
         metrosTotal,
-
         tempoEntreRolos
-
       });
 
       if(
         metrosTotal >= 300 &&
         !alarmeAtivo
       ){
-
         dispararAlarme();
-
       }
 
     }
@@ -724,24 +1063,24 @@
       }
 
       maquinaParada = true;
-
       motivoParada = tipo;
-
       inicioParada = new Date();
+      statusAtual = STATUS_PARADA[tipo];
 
-      document.getElementById(
-        "status"
-      ).innerText = tipo;
+      renderizarEstado();
+      salvarEstado();
 
-      atualizarBotoes();
+      mostrarFeedback(
+        "Parada registrada: " +
+        STATUS_PARADA[tipo] +
+        ".",
+        "warning"
+      );
 
       enviarParaSheets({
-
         tipo,
-
         horarioInicio:
           inicioParada.toLocaleString()
-
       });
 
     }
@@ -752,32 +1091,33 @@
         return;
       }
 
+      const motivoRetorno = motivoParada;
+
       const fimParada = new Date();
 
       const tempoParado =
         Math.floor(
-          (fimParada - inicioParada)
-          / 1000
+          (fimParada - inicioParada) / 1000
         );
 
       tempoParadoAcumulado += tempoParado;
-
       maquinaParada = false;
+      motivoParada = "";
+      inicioParada = null;
+      statusAtual = "Produzindo";
 
-      document.getElementById(
-        "status"
-      ).innerText = "Produzindo";
+      renderizarEstado();
+      salvarEstado();
 
-      atualizarBotoes();
+      mostrarFeedback(
+        "Produção retomada.",
+        "success"
+      );
 
       enviarParaSheets({
-
         tipo:"RETORNO",
-
-        motivo:motivoParada,
-
+        motivo:motivoRetorno,
         tempoParado
-
       });
 
     }
@@ -795,43 +1135,44 @@
       );
 
       audioAlarme.loop = true;
-
       audioAlarme.play();
 
-      navigator.vibrate([
-        500,
-        300,
-        500,
-        300,
-        500
-      ]);
+      if(navigator.vibrate){
+        navigator.vibrate([
+          500,
+          300,
+          500,
+          300,
+          500
+        ]);
+      }
 
     }
 
     function confirmarTroca(){
 
       alarmeAtivo = false;
-
       metrosTotal = 0;
 
       document.getElementById(
         "overlayAlerta"
       ).style.display = "none";
 
-      document.getElementById(
-        "metrosTotal"
-      ).innerText = "0 metros";
-
       if(audioAlarme){
-
         audioAlarme.pause();
-
+        audioAlarme.currentTime = 0;
       }
 
+      renderizarEstado();
+      salvarEstado();
+
+      mostrarFeedback(
+        "Troca confirmada.",
+        "success"
+      );
+
       enviarParaSheets({
-
         tipo:"TROCA_STRETCHER"
-
       });
 
     }
@@ -839,67 +1180,52 @@
     function finalizarProducao(){
 
       enviarParaSheets({
-
         tipo:"FINALIZADO",
-
         rolo:contador
-
       });
 
       producaoIniciada = false;
-
       maquinaParada = false;
-
       contador = 0;
-
       metrosTotal = 0;
+      ultimoApontamento = null;
+      ultimoApontamentoRegistrado = null;
+      tempoParadoAcumulado = 0;
+      tempoUltimoRolo = 0;
+      motivoParada = "";
+      inicioParada = null;
+      statusAtual = "Finalizado";
+      inicioExibicao = "-";
+      ultimoExibicao = "-";
 
-      atualizarBotoes();
+      document.getElementById("op").value = "";
+      document.getElementById("diametro").value = "";
+      document.getElementById("metros").value = "";
 
-      document.getElementById(
-        "contador"
-      ).innerText = "0";
+      renderizarEstado();
+      salvarEstado();
 
-      document.getElementById(
-        "metrosTotal"
-      ).innerText = "0 metros";
-
-      document.getElementById(
-        "tempoRolo"
-      ).innerText =
-        "Tempo último rolo: 0s";
-
-      document.getElementById(
-        "status"
-      ).innerText = "Finalizado";
-
-      document.getElementById(
-        "inicio"
-      ).innerText = "-";
-
-      document.getElementById(
-        "ultimo"
-      ).innerText = "-";
-
-      document.getElementById(
-        "op"
-      ).value = "";
-
-      document.getElementById(
-        "diametro"
-      ).value = "";
-
-      document.getElementById(
-        "metros"
-      ).value = "";
-
-      alert(
-        "Produção finalizada"
+      mostrarFeedback(
+        "Produção finalizada.",
+        "success"
       );
 
     }
 
-    atualizarBotoes();
+    carregarFila();
+    restaurarEstado();
+    iniciarContadorBloqueio();
+    processarFilaPendencias();
+
+    window.addEventListener(
+      "online",
+      processarFilaPendencias
+    );
+
+    window.addEventListener(
+      "beforeunload",
+      salvarEstado
+    );
 
   </script>
 
