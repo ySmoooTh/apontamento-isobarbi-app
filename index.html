@@ -540,12 +540,40 @@
       const silencioso =
         opcoes.silencioso === true;
 
+      const op =
+        document.getElementById("op")
+        .value
+        .trim();
+
+      const diametro =
+        document.getElementById("diametro")
+        .value;
+
+      const metros =
+        document.getElementById("metros")
+        .value;
+
+      const dadosProducao = {};
+
+      if(op){
+        dadosProducao.op = op;
+      }
+
+      if(diametro){
+        dadosProducao.diametro = diametro;
+      }
+
+      if(metros){
+        dadosProducao.metros = metros;
+      }
+
       const payload = {
         eventId:
           dados.eventId || gerarIdEvento(),
         criadoEm:
           dados.criadoEm ||
           new Date().toISOString(),
+        ...dadosProducao,
         ...dados
       };
 
