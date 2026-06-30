@@ -337,6 +337,23 @@
     </button>
 
     <div
+      id="subcategoriaContainer"
+      style="display:none;"
+    >
+      <select id="subcategoria">
+        <option value="">Selecione uma opção</option>
+      </select>
+
+      <button
+        id="btnConfirmarParada"
+        class="warning"
+        onclick="confirmarParadaSelecionada()"
+      >
+        CONFIRMAR MOTIVO
+      </button>
+    </div>
+
+    <div
       id="feedback"
       class="feedback"
       aria-live="polite"
@@ -390,6 +407,23 @@
       FALTA_OPERADOR:"Falta operador"
     };
 
+    const SUBCATEGORIAS_PARADA = {
+      PARADA_MAQUINA:[
+        "DESBOBINADOR DE PEX",
+        "DESBOBINADOR DE ESPUMA",
+        "EMENDA DE ESPUMA",
+        "SOLDADOR",
+        "STRECHADOR",
+        "PUXADOR",
+        "BOBINADOR"
+      ],
+      FALTA_MATERIAL:[
+        "PEX",
+        "ESPUMA",
+        "STRECH"
+      ]
+    };
+
     const INTERVALO_MINIMO_APONTAMENTO_MS =
       4 * 60 * 1000;
 
@@ -414,6 +448,8 @@
     let filaPendencias = [];
     let intervaloBloqueio = null;
     let ultimoCliqueApontarMs = 0;
+    let tipoParadaPendente = "";
+    let subcategoriaParada = "";
 
     function gerarIdEvento(){
 
@@ -689,6 +725,8 @@
         metrosTotal,
         maquinaParada,
         motivoParada,
+        subcategoriaParada,
+        tipoParadaPendente,
         inicioParada:
           serializarData(inicioParada),
         tempoParadoAcumulado,
@@ -765,6 +803,54 @@
       ).innerText = ultimoExibicao;
 
       atualizarBotoes();
+      atualizarSeletorSubcategoria();
+
+    }
+
+    function atualizarSeletorSubcategoria(){
+
+      const container =
+        document.getElementById(
+          "subcategoriaContainer"
+        );
+
+      const select =
+        document.getElementById("subcategoria");
+
+      const opcoes =
+        SUBCATEGORIAS_PARADA[
+          tipoParadaPendente
+        ];
+
+      if(
+        producaoIniciada &&
+        !maquinaParada &&
+        opcoes &&
+        opcoes.length > 0
+      ){
+
+        container.style.display = "block";
+        select.innerHTML =
+          '<option value="">Selecione uma opção</option>';
+
+        for(const opcao of opcoes){
+
+          const option =
+            document.createElement("option");
+
+          option.value = opcao;
+          option.textContent = opcao;
+          select.appendChild(option);
+
+        }
+
+        return;
+
+      }
+
+      container.style.display = "none";
+      select.innerHTML =
+        '<option value="">Selecione uma opção</option>';
 
     }
 
@@ -883,6 +969,10 @@
         maquinaParada =
           Boolean(estado.maquinaParada);
         motivoParada = estado.motivoParada || "";
+        subcategoriaParada =
+          estado.subcategoriaParada || "";
+        tipoParadaPendente =
+          estado.tipoParadaPendente || "";
         inicioParada =
           desserializarData(estado.inicioParada);
         tempoParadoAcumulado =
@@ -969,6 +1059,8 @@
       ultimoApontamentoRegistrado = null;
       maquinaParada = false;
       motivoParada = "";
+      subcategoriaParada = "";
+      tipoParadaPendente = "";
       inicioParada = null;
       statusAtual = "Produzindo";
       inicioExibicao =
@@ -1084,23 +1176,86 @@
         return;
       }
 
+      const subcategorias =
+        SUBCATEGORIAS_PARADA[tipo];
+
+      if(
+        subcategorias &&
+        subcategorias.length > 0
+      ){
+        tipoParadaPendente = tipo;
+
+        renderizarEstado();
+        salvarEstado();
+
+        mostrarFeedback(
+          "Selecione a subcategoria para continuar.",
+          "info"
+        );
+
+        return;
+      }
+
+      registrarParada(tipo);
+
+    }
+
+    function confirmarParadaSelecionada(){
+
+      const select =
+        document.getElementById("subcategoria");
+
+      if(
+        !tipoParadaPendente ||
+        !select.value
+      ){
+        mostrarFeedback(
+          "Selecione uma subcategoria.",
+          "error"
+        );
+        return;
+      }
+
+      registrarParada(
+        tipoParadaPendente,
+        select.value
+      );
+
+    }
+
+    function registrarParada(
+      tipo,
+      subcategoria = ""
+    ){
+
+      if(maquinaParada){
+        return;
+      }
+
       maquinaParada = true;
       motivoParada = tipo;
+      subcategoriaParada = subcategoria;
+      tipoParadaPendente = "";
       inicioParada = new Date();
-      statusAtual = STATUS_PARADA[tipo];
+      statusAtual = subcategoria
+        ? STATUS_PARADA[tipo] +
+          " - " +
+          subcategoria
+        : STATUS_PARADA[tipo];
 
       renderizarEstado();
       salvarEstado();
 
       mostrarFeedback(
         "Parada registrada: " +
-        STATUS_PARADA[tipo] +
+        statusAtual +
         ".",
         "warning"
       );
 
       enviarParaSheets({
         tipo,
+        subcategoria,
         horarioInicio:
           inicioParada.toLocaleString()
       });
@@ -1114,6 +1269,8 @@
       }
 
       const motivoRetorno = motivoParada;
+      const subcategoriaRetorno =
+        subcategoriaParada;
 
       const fimParada = new Date();
 
@@ -1125,6 +1282,7 @@
       tempoParadoAcumulado += tempoParado;
       maquinaParada = false;
       motivoParada = "";
+      subcategoriaParada = "";
       inicioParada = null;
       statusAtual = "Produzindo";
 
@@ -1139,6 +1297,7 @@
       enviarParaSheets({
         tipo:"RETORNO",
         motivo:motivoRetorno,
+        subcategoria:subcategoriaRetorno,
         tempoParado
       });
 
@@ -1215,6 +1374,8 @@
       tempoParadoAcumulado = 0;
       tempoUltimoRolo = 0;
       motivoParada = "";
+      subcategoriaParada = "";
+      tipoParadaPendente = "";
       inicioParada = null;
       statusAtual = "Finalizado";
       inicioExibicao = "-";
