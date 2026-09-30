@@ -46,8 +46,15 @@
     .developer{
       text-align:center;
       color:#777;
-      margin-bottom:20px;
+      margin-bottom:4px;
       font-size:14px;
+    }
+
+    .version{
+      text-align:center;
+      color:#777;
+      margin-bottom:20px;
+      font-size:12px;
     }
 
     input,
@@ -85,6 +92,10 @@
 
     .warning{
       background:#ef6c00;
+    }
+
+    .impressora{
+      background:#5d4037;
     }
 
     .material{
@@ -305,6 +316,10 @@
       By: Felipe Moreira
     </div>
 
+    <div class="version">
+      Versão 4.0
+    </div>
+
     <input
       type="number"
       id="op"
@@ -372,6 +387,15 @@
       disabled
     >
       PARADA MÁQUINA
+    </button>
+
+    <button
+      id="btnImpressora"
+      class="impressora"
+      onclick="abrirParada('IMPRESSORA_PARADA')"
+      disabled
+    >
+      IMPRESSORA PARADA
     </button>
 
     <button
@@ -468,6 +492,7 @@
 
     const STATUS_PARADA = {
       PARADA_MAQUINA:"Parada máquina",
+      IMPRESSORA_PARADA:"Impressora parada",
       FALTA_MATERIAL:"Falta material",
       FALTA_OPERADOR:"Falta operador"
     };
@@ -1019,6 +1044,12 @@
 
       document.getElementById(
         "btnParada"
+      ).disabled =
+        !producaoIniciada ||
+        maquinaParada;
+
+      document.getElementById(
+        "btnImpressora"
       ).disabled =
         !producaoIniciada ||
         maquinaParada;

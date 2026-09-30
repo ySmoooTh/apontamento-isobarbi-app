@@ -1,4 +1,4 @@
-const CACHE_NAME = "apontamento-isobarbi-v3";
+const CACHE_NAME = "apontamento-isobarbi-v4";
 
 const ASSETS = [
   "./",
